@@ -13,10 +13,11 @@ from tkinter import simpledialog
 #Caution: You have to use lists.  Using individual variables you get access issues. 
 
 data = []
-cals = 0
+
 calsGoal = 2000
 rFile = open("data.txt", "r")
-
+rFile2 = open("cals.txt", "r")
+cals = float(rFile2.read())
 data = rFile.read().split("\n")
 
 for i in range(0, len(data),1):
@@ -73,13 +74,13 @@ def calsRunMe():
 	#Step 2:  Access widget
 	value1 = float(calsEntry.get())
 	print(value1)	
-
+	
 	#Step 3: Add to Variable
 	cals+=value1
 	#Step 4: Update display	
 	bar['value'] = float(cals)/float(calsGoal)*100
 	barValue = float(cals)/float(calsGoal)*100
-	label['text'] = str(barValue)+'%'
+	label['text'] = str(int(round(barValue,0)))+'%'
 	calsEntry.delete(0, 'end')
 
 
@@ -92,6 +93,9 @@ def on_closing():
 		for i in range(len(data)-1, len(data),1):
 			wFile.write(str(data[i]))
 		wFile.close()
+		wFile2 = open("cals.txt", "w")
+		wFile2.write(str(cals))
+		wFile2.close()
 		root.destroy()
 
 #GUI SETUP ROOT1 *****************
@@ -103,18 +107,18 @@ style.theme_use('default')
 style.configure("orange.horizontal.TEntry", foreground='#ff8f00')
 style.configure("orange.TButton", background='#ff8f00', font=("Purisa", 20))
 style.configure("orange.Horizontal.TProgressbar", background='#ff8f00')
-style.configure("transp.TLabel", background='white',font=("Purisa", 20) )
+style.configure("transp.TLabel", font=("Purisa", 20), foreground='black' )
 #canvas
 c = Canvas(root, background='#8b0000', highlightthickness=3, highlightbackground="black", width=390)
 c.grid(row=3,column=1, columnspan=5, pady=3)
 
 #progress bar
 bar = Progressbar(length=390, style='orange.Horizontal.TProgressbar')
-
 bar.grid(row=5, column=1, columnspan=3, pady=10, padx=10, sticky=E+W+N+S)
+bar['value']=cals/calsGoal*100
 #label on progress bar
 
-label=Label(root, text = "0", style = 'transp.TLabel')
+label=Label(root, text = str(int(bar['value']))+"%", style = 'transp.TLabel')
 label.grid(row=5, column=2, pady=10, padx=10, sticky=W)
 
 chartUpdate();
@@ -140,5 +144,3 @@ calsEntry.grid(row=1, column=3, padx=10, pady=10);
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
-
-#GUI SETUP ROOT 2 ****************************
