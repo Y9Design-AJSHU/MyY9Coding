@@ -1,3 +1,4 @@
+#Created by: A.J. Shulman
 from tkinter import *
 from tkinter import Entry
 from tkinter.ttk import Progressbar
@@ -10,7 +11,7 @@ import datetime
 import random
 
 #VARIABLES*****************
-#This variable holds the weight
+#This list holds the weight
 data = []
 #This variable stores time
 now = datetime.datetime.now()
@@ -36,7 +37,7 @@ def goalCalsCalc():
 	bw=data[len(data)-1]
 	heightFile2 = open("height.txt", "r")
 	height = float(heightFile2.read())
-	ageFile2 = open("height.txt", "r")
+	ageFile2 = open("age.txt", "r")
 	age = float(ageFile2.read())
 	mORfFile2 = open("mORf.txt", "r")
 	mORf = mORfFile2.read()
@@ -78,6 +79,7 @@ def goalCalsCalc():
 
 #--FUNCTIONS-----------------------------------------
 def dayFunc():
+	#This function calls the resetBar() function when it is a new day
 	global day
 	print(day)
 	day2int=0
@@ -89,11 +91,13 @@ def dayFunc():
 	dayFile.close()
 		
 def resetBar():
+	#This function resets the bar
 	global cals
 	cals=0
 
 	
 def funFact():
+	#This function returns a random fun fact
 	r = random.randint(0,5)
 	if r==0:
 		return 'As with quite literally everything else tied to your physical and mental health, sleep is critical for weight loss.'
@@ -110,6 +114,7 @@ def funFact():
 
 	
 def submitStats():
+	#This function writes all the info entered in the first window into their individual .txt files
 	with open("height.txt", "w") as myfile:
 		myfile.write(str(heightEntry1.get()))
 	with open("al.txt", "w") as myfile:
@@ -124,7 +129,8 @@ def submitStats():
 	root2.destroy()
 
 def weigthRunMe():
-
+	'''This function adds the weight entered into the data list. It will replace the last item in the list if it is the same day and it
+	will create a new item if it is the same day.'''
 	#Step 2:  Access and then clear widget
 	value = weightEntry.get()
 	weightEntry.delete(0, 'end')
@@ -145,7 +151,7 @@ def weigthRunMe():
 	
 	
 def chartUpdate():
-	
+	#This function updates the chart when a new weight is entered.
 	#These are local variables only needed inthis function.
 	#bar graph
 	y_stretch = 1
@@ -165,6 +171,7 @@ def chartUpdate():
 #Step 1: Bind this function to an action	
 
 def calsRunMe():
+	#This function updates the bar value and label text when calories are entered.
 	global cals
 	#Step 2:  Access widget
 	value1 = float(calsEntry.get())
@@ -179,6 +186,7 @@ def calsRunMe():
 
 
 def on_closing():
+	#This function saves everything when the second window is closed.
 	if messagebox.askokcancel("Save", "Would you like to save everything?"):
 		#This is where you write to the file
 		wFile = open("data.txt", "w")
@@ -223,10 +231,10 @@ ageEntry1Label.grid(row=2, column=1, padx = 10, pady=10)
 heightEntry1 = Entry(root2, width=15,style='2orange.horizontal.TEntry',font=("Purisa", 20))
 heightEntry1.grid(row=3, column=2, padx = 10, pady=10)
 
-heightEntry1Label=Label(root2, text='Enter Height Here (cm)', style='transp.TLabel')
+heightEntry1Label=Label(root2, text='Enter Height Here (in)', style='transp.TLabel')
 heightEntry1Label.grid(row=2, column=2, padx = 10, pady=10)
 
-#m or f
+#Gender
 gEntry1 = Entry(root2, width=15,style='2orange.horizontal.TEntry',font=("Purisa", 20))
 gEntry1.grid(row=7, column=1, padx = 10, pady=10)
 
@@ -244,10 +252,8 @@ aLEntry1Label.grid(row=4, column=1, padx = 10, pady=10)
 weightEntry1 = Entry(root2, width=15,style='2orange.horizontal.TEntry',font=("Purisa", 20))
 weightEntry1.grid(row=5, column=2, padx = 10, pady=10)
 
-weightEntry1Label=Label(root2, text='Enter Weight Here', style='transp.TLabel')
+weightEntry1Label=Label(root2, text='Enter Weight Here (lbs.)', style='transp.TLabel')
 weightEntry1Label.grid(row=4, column=2, padx = 10, pady=10)
-
-
 
 #Button for Submition
 submit1 = Button(root2, text="Submit", style='2orange.TButton', command=submitStats)
@@ -273,7 +279,7 @@ style.configure("norm.TLabel", font=("Purisa", 20), foreground='black', bg='whit
 c = Canvas(root, background='#8b0000', highlightthickness=3, highlightbackground="black", width=390)
 c.grid(row=3,column=1, columnspan=3, pady=3)
 
-#progress bar
+#progress-bar
 bar = Progressbar(length=390, style='orange.Horizontal.TProgressbar')
 bar.grid(row=5, column=1, columnspan=3, pady=10, padx=10, sticky=E+W+N+S)
 bar['value']=cals/calsGoal*100
@@ -304,7 +310,7 @@ calsEntry = Entry(root, width=15,style='orange.horizontal.TEntry',font=("Purisa"
 calsEntry.grid(row=1, column=3, padx=10, pady=10);
 
 funFact=Label(root,text = funFact(), style = 'norm.TLabel', wraplength=170)
-funFact.grid(column=4, row=2, rowspan=4, pady=15)
+funFact.grid(column=4, row=2, rowspan=4, pady=15, padx=10)
 
 root.protocol("WM_DELETE_WINDOW", on_closing)
 root.mainloop()
